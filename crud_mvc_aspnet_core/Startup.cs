@@ -37,21 +37,25 @@ namespace crud_mvc_aspnet_core
             services.AddApplicationServices();
 
             #region Configuration FluentValidation
+
             services.AddControllers();
             services.AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
                 options.DisableDataAnnotationsValidation = true;
             });
+
             #endregion
 
             #region Configuration services
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
             #endregion
         }
 

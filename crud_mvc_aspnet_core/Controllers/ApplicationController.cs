@@ -140,6 +140,7 @@ namespace crud_mvc_aspnet_core.Controllers
         {
             _defaultLightTheme = opt;
         }
+
         #endregion
 
         #region Configure global variables
