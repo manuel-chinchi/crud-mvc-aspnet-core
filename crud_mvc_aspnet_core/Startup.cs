@@ -1,4 +1,5 @@
 using crud_mvc_aspnet_core.Controllers;
+using crud_mvc_aspnet_core.Extensions;
 using crud_mvc_aspnet_core.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -32,6 +33,8 @@ namespace crud_mvc_aspnet_core
 
             //services.AddSingleton<ArticleController, ArticleController>();
             //services.AddMvc().AddControllersAsServices();
+
+            services.AddApplicationServices();
 
             #region Configuration FluentValidation
             services.AddControllers();

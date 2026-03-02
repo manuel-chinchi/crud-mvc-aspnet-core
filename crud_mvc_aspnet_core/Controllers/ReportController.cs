@@ -1,4 +1,5 @@
 ﻿using crud_mvc_aspnet_core.Models;
+using crud_mvc_aspnet_core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,13 @@ namespace crud_mvc_aspnet_core.Controllers
 {
     public class ReportController : BaseController
     {
+        private readonly ICategoryService _categoryService;
+
+        public ReportController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
         public IActionResult Reports()
         {
             ViewBag.ChartTypes = new List<ChartInfo>()
@@ -26,7 +34,7 @@ namespace crud_mvc_aspnet_core.Controllers
         [HttpPost]
         public JsonResult GetDataCategories()
         {
-            List<object> dataCategories = categoryService.
+            List<object> dataCategories = _categoryService.
                 GetCategories().
                 Select(c => new
                 {

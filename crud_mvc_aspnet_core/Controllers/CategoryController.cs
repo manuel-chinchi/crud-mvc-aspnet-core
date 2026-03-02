@@ -1,4 +1,5 @@
 ﻿using crud_mvc_aspnet_core.Models;
+using crud_mvc_aspnet_core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,13 @@ namespace crud_mvc_aspnet_core.Controllers
 {
     public class CategoryController : BaseController
     {
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -22,7 +30,7 @@ namespace crud_mvc_aspnet_core.Controllers
         {
             if (ModelState.IsValid)
             {
-                categoryService.CreateCategory(category);
+                _categoryService.CreateCategory(category);
 
                 TempData["AlertMessage"] = "Se ha agregado la categoría.";
                 TempData["AlertStyle"] = AlertConstants.SUCCESS;
@@ -35,10 +43,10 @@ namespace crud_mvc_aspnet_core.Controllers
 
         public IActionResult Delete(int id)
         {
-            TempData["AlertMessage"] = "Se ha eliminado la categoría '" + categoryService.GetCategory(id).Name + "'";
+            TempData["AlertMessage"] = "Se ha eliminado la categoría '" + _categoryService.GetCategory(id).Name + "'";
             TempData["AlertStyle"] = AlertConstants.SUCCESS;
 
-            categoryService.DeleteCategory(id);
+            _categoryService.DeleteCategory(id);
 
             return RedirectToAction("List");
         }
@@ -48,7 +56,7 @@ namespace crud_mvc_aspnet_core.Controllers
             ViewBag.Message = "Lista de categorias existentes.";
             ViewBag.TooltipText = "No se pueden borrar categorías con artículos relacionados.";
 
-            return View(categoryService.GetCategories());
+            return View(_categoryService.GetCategories());
         }
     }
 }

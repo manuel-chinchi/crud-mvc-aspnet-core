@@ -10,14 +10,7 @@ namespace crud_mvc_aspnet_core.Controllers
 {
     public class BaseController : ApplicationController
     {
-        protected IArticleService articleService { get; set; }
-        protected ICategoryService categoryService { get; set; }
-
-        public BaseController()
-        {
-            articleService = new ArticleService();
-            categoryService = new CategoryService();
-        }
+        public BaseController() { }
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {

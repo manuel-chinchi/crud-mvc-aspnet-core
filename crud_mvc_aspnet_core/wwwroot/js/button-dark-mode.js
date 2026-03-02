@@ -2,7 +2,7 @@
 var sheetThemeDark;
 var sheetRef = $('#bootstrap-theme');
 
-function loadStyles(file, callback) {
+function loadStyle(file, callback) {
     var newSheet = $('<link rel="stylesheet" type="text/css" href="' + file + '">');
 
     $('head').append(newSheet);
@@ -14,25 +14,31 @@ function loadStyles(file, callback) {
     });
 }
 
-function alternateStyles(fileActivated) {
-    loadStyles(fileActivated, function () {
-        sheetRef.remove();
+function changeTheme(cssFile) {
+    var newSheet = $('<link rel="stylesheet" type="text/css" href="' + cssFile + '">');
+    $('head').append(newSheet);
 
-        sheetRef.attr('id', '');
-        $('head link[href="' + fileActivated + '"]').attr('id', 'bootstrap-theme');
-    });
+    //loadStyle(cssFile, function () {
+    //    sheetRef.remove();
+
+    //    sheetRef.attr('id', '');
+    //    $('head link[href="' + cssFile + '"]').attr('id', 'bootstrap-theme');
+    //});
 }
 
-function changeTheme(themeOn, themeOff, switchIsActive) {
-    var urlChangeTheme = "/Application/ChangeTheme?themeOn=" + themeOn + "&themeOff=" + themeOff + "&switchIsActive=" + switchIsActive;
+function changeThemeAsync(themeOn, themeOff, switchIsActive) {
+    var controller = "Application";
+    var method = "ChangeTheme";
+
+    var actionController = `/${controller}/${method}?themeOn=${themeOn}&themeOff=${themeOff}&switchIsActive=${switchIsActive}`;
     $.ajax({
         type: "POST",
-        url: urlChangeTheme,
+        url: actionController,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
             if (data != null) {
-                alternateStyles(data.themeOn);
+                changeTheme(data.themeOn);
             }
         },
         error: function (error) {
@@ -44,9 +50,9 @@ function changeTheme(themeOn, themeOff, switchIsActive) {
 $(document).ready(function () {
     $('#btn-switch-theme').change(function () {
         if ($(this).is(':checked')) {
-            changeTheme(sheetThemeDark, sheetThemeLight, true);
+            changeThemeAsync(sheetThemeDark, sheetThemeLight, true);
         } else {
-            changeTheme(sheetThemeLight, sheetThemeDark, false);
+            changeThemeAsync(sheetThemeLight, sheetThemeDark, false);
         }
     });
 });

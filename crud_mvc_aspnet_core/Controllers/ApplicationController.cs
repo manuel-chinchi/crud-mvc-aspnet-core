@@ -112,7 +112,8 @@ namespace crud_mvc_aspnet_core.Controllers
             var keys = _session.Keys.ToList();
 
             //if (Session != null && Session.Keys.Count() == 0)
-            if (!keys.Contains(ApplicationConstants.K_THEME_ON) && !keys.Contains(ApplicationConstants.K_THEME_ON) &&
+            if (!keys.Contains(ApplicationConstants.K_THEME_ON) && 
+                !keys.Contains(ApplicationConstants.K_THEME_ON) &&
                 !keys.Contains(ApplicationConstants.K_SWITCH_IS_ACTIVE))
             {
                 ThemeOn = ApplicationConstants.FILE_THEME_LIGHT;

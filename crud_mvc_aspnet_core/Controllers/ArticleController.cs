@@ -1,4 +1,5 @@
 ﻿using crud_mvc_aspnet_core.Models;
+using crud_mvc_aspnet_core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,20 @@ namespace crud_mvc_aspnet_core.Controllers
 {
     public class ArticleController : BaseController
     {
+        private readonly IArticleService _articleService;
+        private readonly ICategoryService _categoryService;
+
+        public ArticleController(IArticleService articleService, ICategoryService categoryService)
+        {
+            _articleService = articleService;
+            _categoryService = categoryService;
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Message = "Ingrese los datos del artículo";
-            ViewBag.Categories = categoryService.GetCategories();
+            ViewBag.Categories = _categoryService.GetCategories();
 
             return View();
         }
@@ -21,11 +31,11 @@ namespace crud_mvc_aspnet_core.Controllers
         [HttpPost]
         public IActionResult Create(Article article)
         {
-            article.Category = categoryService.GetCategory(article.CategoryId);
+            article.Category = _categoryService.GetCategory(article.CategoryId);
 
             if (ModelState.IsValid)
             {
-                articleService.CreateArticle(article);
+                _articleService.CreateArticle(article);
 
                 TempData["AlertMessage"] = "Se ha agregado el artículo.";
                 TempData["AlertStyle"] = AlertConstants.SUCCESS;
@@ -40,19 +50,19 @@ namespace crud_mvc_aspnet_core.Controllers
         public IActionResult Edit(int id)
         {
             ViewBag.Message = "Datos del artículo";
-            ViewBag.Categories = categoryService.GetCategories();
+            ViewBag.Categories = _categoryService.GetCategories();
 
-            return View(articleService.GetArticle(id));
+            return View(_articleService.GetArticle(id));
         }
 
         [HttpPost]
         public IActionResult Edit(Article article)
         {
-            article.Category = categoryService.GetCategory(article.CategoryId);
+            article.Category = _categoryService.GetCategory(article.CategoryId);
 
             if (ModelState.IsValid)
             {
-                articleService.UpdateArticle(article);
+                _articleService.UpdateArticle(article);
 
                 TempData["AlertMessage"] = "Se ha actualizado el artículo";
                 TempData["AlertStyle"] = AlertConstants.SUCCESS;
@@ -65,10 +75,10 @@ namespace crud_mvc_aspnet_core.Controllers
 
         public IActionResult Delete(int id)
         {
-            TempData["AlertMessage"] = "Se ha eliminado el artículo '" + articleService.GetArticle(id).Name + "'";
+            TempData["AlertMessage"] = "Se ha eliminado el artículo '" + _articleService.GetArticle(id).Name + "'";
             TempData["AlertStyle"] = AlertConstants.SUCCESS;
 
-            articleService.DeleteArticle(id);
+            _articleService.DeleteArticle(id);
 
             return RedirectToAction("List");
         }
@@ -77,7 +87,7 @@ namespace crud_mvc_aspnet_core.Controllers
         {
             ViewBag.Message = "Lista de artículos existentes";
 
-            return View(articleService.GetArticles());
+            return View(_articleService.GetArticles());
         }
     }
 }
